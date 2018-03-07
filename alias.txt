@@ -1,0 +1,35 @@
+alias hosts='cat /etc/hosts'
+alias c7='chmod -fR 777 '
+alias cl='clear'
+alias lah='ls -lah'
+alias host="/sbin/ip route|awk '/default/ { print $3 }'"
+alias thost='cat /var/lib/tor/hidden_service/hostname'
+alias report='/report.sh'
+alias master="/sbin/ip route|awk '/default/ { print $3 }'"
+
+alias ssh="ssh -o ProxyCommand='nc -x localhost:9050 %h %p'"
+
+# From http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html
+export MARKPATH=$HOME/.marks
+mkcd(){ NAME=$1; mkdir -p "$NAME"; cd "$NAME"; }
+function jump {
+    cd -P $MARKPATH/$1 2> /dev/null || echo "No such mark: $1"
+}
+function mark {
+    mkdir -p $MARKPATH; ln -s $(pwd) $MARKPATH/$1
+}
+function unmark {
+    rm -i $MARKPATH/$1
+}
+function marks {
+    ls -l $MARKPATH | sed 's/  / /g' | cut -d' ' -f9- && echo
+}
+function _jump {
+      local cur=${COMP_WORDS[COMP_CWORD]}
+      local marks=$(find $MARKPATH -type l | awk -F '/' '{print $NF}')
+      COMPREPLY=($(compgen -W '${marks[@]}' -- "$cur"))
+      return 0
+}
+complete -o default -o nospace -F _jump jump
+
+alias realias='unalias -a;source ~/.alias'

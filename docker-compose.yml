@@ -1,0 +1,11 @@
+# docker version 2 example
+
+version: "2"
+
+services:
+  tor:
+  	restart: always
+    image: shivergard/tor_central
+    environment:
+     - MASTER=telnet.master.sample
+     - SSH_PASSOWRD=LongAndStrongPassword
